@@ -35,6 +35,7 @@ module.exports = {
                             if (error) throw error;
                             if (results.length > 0) {
                                 const userId = results[0].user_id;
+                                const role = results[0].role;
 
                                 // Update last_login waktu sekarang
                                 const updateQuery = `UPDATE user SET last_login = NOW() WHERE user_id = ?`;
@@ -53,7 +54,13 @@ module.exports = {
                                     req.session.loggedin = true;
                                     req.session.userid = userId;
                                     req.session.nama_depan = results[0].nama_depan;
-                                    res.redirect('/profile');
+                                    
+                                    if(role == 1){
+                                       res.redirect('/profile'); 
+                                    }else if (role ==2){
+                                        res.redirect('/images/png.png')
+                                    }
+                                    
                                 });
                             } else {
                                 req.flash('color', 'danger');
