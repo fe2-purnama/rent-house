@@ -1,6 +1,8 @@
 const config = require('../library/database');
 let mysql = require('mysql');
 let pool = mysql.createPool(config);
+const jwt = require('jsonwebtoken');
+const secretKey = 'your-secret-key'; // Use a strong secret key
 
 pool.on('error', (err) => {
     console.error(err);
@@ -50,17 +52,16 @@ module.exports = {
                                         return;
                                     }
 
-                                    // Set session dan redirect ke profil
+                                    // Set session dan redirect atau berikan JWT token
                                     req.session.loggedin = true;
                                     req.session.userid = userId;
                                     req.session.nama_depan = results[0].nama_depan;
                                     
-                                    if(role == 1){
-                                       res.redirect('/profile'); 
-                                    }else if (role ==2){
-                                        res.redirect('/images/png.png')
+                                    if (role == 1) {
+                                        res.redirect('/profile'); 
+                                    } else if (role == 2) {
+                                        res.redirect('/userList'); 
                                     }
-                                    
                                 });
                             } else {
                                 req.flash('color', 'danger');
@@ -102,4 +103,21 @@ module.exports = {
             res.status(500).send('Terjadi kesalahan pada server');
         }
     },
+};
+
+// Middleware to verify JWT token
+module.exports.verifyToken = (req, res, next) => {
+    const token = req.headers['authorization'];
+    if (!token) {
+        return res.status(403).send('Token is required');
+    }
+    
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return res.status(401).send('Invalid token');
+        }
+        req.userId = decoded.userId;
+        req.role = decoded.role;
+        next();
+    });
 };
