@@ -56,11 +56,11 @@ module.exports = {
                                     req.session.loggedin = true;
                                     req.session.userid = userId;
                                     req.session.nama_depan = results[0].nama_depan;
-                                    
+
                                     if (role == 1) {
                                         res.redirect('/profile'); 
                                     } else if (role == 2) {
-                                        res.redirect('/userList'); 
+                                        res.redirect('/userlist'); 
                                     }
                                 });
                             } else {
@@ -116,8 +116,10 @@ module.exports.verifyToken = (req, res, next) => {
         if (err) {
             return res.status(401).send('Invalid token');
         }
+        else{
         req.userId = decoded.userId;
         req.role = decoded.role;
-        next();
+        next();   
+         }
     });
 };
