@@ -61,6 +61,8 @@ module.exports = {
                                         res.redirect('/profile'); 
                                     } else if (role == 2) {
                                         res.redirect('/userlist'); 
+                                        // const token = jwt.sign({ userId, role }, secretKey, { expiresIn: '1h' });
+                                        // res.json({ token });
                                     }
                                 });
                             } else {
