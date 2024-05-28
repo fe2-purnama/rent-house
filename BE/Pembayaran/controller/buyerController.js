@@ -6,6 +6,7 @@ pool.on("error", (err) => {
   console.error(err);
 });
 
+// Menampilkan List Costumers
 module.exports = {
   getBuyers: (req, res) => {
     const query = `
@@ -14,7 +15,7 @@ module.exports = {
     JOIN user ON \`order\`.user_id = user.user_id
     JOIN product ON \`order\`.product_id = product.product_id
     JOIN kategori ON product.kategori_id = kategori.kategori_id
-`;
+    `;
     pool.query(query, (err, results) => {
       if (err) {
         res.status(500).json({ error: err.message });
@@ -26,13 +27,14 @@ module.exports = {
 
   getBuyerById: (req, res) => {
     const buyerId = req.params.id;
-    // Query SQL untuk mengambil pembeli berdasarkan ID
+    // Query SQL untuk mengambil pembeli berdasarkan user.id
     const query = `
-    SELECT user.user_id, user.nama_depan, user.email, product.nama_product, kategori.nama_kategori, product.harga, product.lokasi, order.role, order.status
-    FROM \`order\`
-    JOIN user ON \`order\`.user_id = user.user_id
-    JOIN product ON \`order\`.product_id = product.product_id
-    JOIN kategori ON product.kategori_id = kategori.kategori_id
+  SELECT user.user_id, user.nama_depan, user.email, product.nama_product, kategori.nama_kategori, product.harga, product.lokasi, \`order\`.role, \`order\`.status
+  FROM \`order\`
+  JOIN user ON \`order\`.user_id = user.user_id
+  JOIN product ON \`order\`.product_id = product.product_id
+  JOIN kategori ON product.kategori_id = kategori.kategori_id
+  WHERE user.user_id = ?
 `;
     pool.query(query, [buyerId], (err, results) => {
       if (err) {
@@ -59,21 +61,13 @@ module.exports = {
     });
   },
 
+  //menghapus pesanan berdasarkan order_id
   deleteBuyer: (req, res) => {
     const { id } = req.params;
-    let query;
-    let params;
 
-    // Periksa apakah id adalah user_id atau order_id
-    if (!isNaN(id)) {
-      query = "DELETE FROM `order` WHERE user_id = ?";
-      params = [id];
-    } else {
-      query = "DELETE FROM `order` WHERE order_id = ?";
-      params = [id];
-    }
+    const query = "DELETE FROM `order` WHERE order_id = ?";
 
-    pool.query(query, params, (err, results) => {
+    pool.query(query, [id], (err, results) => {
       if (err) {
         res.status(500).json({ error: err.message });
       } else {
