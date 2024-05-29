@@ -52,8 +52,6 @@
         <h1>Invoice</h1>
       </div>
       <div class="invoice-details">
-        <p>Invoice ID: <strong><%= invoice.invoice_id %></strong></p>
-        <p>Customer ID: <strong><%= invoice.customer.user_id %></strong></p>
         <p>Customer Name: <strong><%= invoice.customer.name %></strong></p>
         <p>Customer Email: <strong><%= invoice.customer.email %></strong></p>
         <p>Order Date: <strong><%= invoice.order_date %></strong></p>
@@ -61,7 +59,6 @@
       <table class="invoice-table">
         <thead>
           <tr>
-            <th>Product ID</th>
             <th>Product Name</th>
             <th>Category</th>
             <th>Image URL</th>
@@ -77,7 +74,6 @@
         </thead>
         <tbody>
           <tr>
-            <td><%= invoice.product.product_id %></td>
             <td><%= invoice.product.name %></td>
             <td><%= invoice.product.category %></td>
             <td><%= invoice.product.image_url %></td>

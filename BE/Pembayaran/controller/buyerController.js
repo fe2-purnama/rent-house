@@ -21,13 +21,14 @@ module.exports = {
         res.status(500).json({ error: err.message });
       } else {
         res.json({ buyers: results });
+        // res.render("order", { buyers: results });
       }
     });
   },
 
+  //mengambil pembeli berdasarkan user.id
   getBuyerById: (req, res) => {
     const buyerId = req.params.id;
-    // Query SQL untuk mengambil pembeli berdasarkan user.id
     const query = `
   SELECT user.user_id, user.nama_depan, user.email, product.nama_product, kategori.nama_kategori, product.harga, product.lokasi, \`order\`.role, \`order\`.status
   FROM \`order\`
@@ -45,6 +46,7 @@ module.exports = {
       }
 
       res.send(results[0]);
+      // res.render("order", { buyer: results[0] });
     });
   },
 
