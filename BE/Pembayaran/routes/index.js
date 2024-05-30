@@ -10,7 +10,7 @@ const invoiceRouter = require("./invoice");
 router.get("/profile", isLogin, profile);
 
 // Gunakan rute untuk pembeli (/buyer)- dian
-router.get("/buyer", buyerRoutes);
+router.get("/buyers", buyerRoutes);
 router.get("/buyer/:id", buyerRoutes);
 router.patch("/buyer/:id", buyerRoutes);
 router.delete("/buyer/:id", buyerRoutes);

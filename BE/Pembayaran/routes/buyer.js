@@ -8,7 +8,7 @@ const {
 } = require("../controller/buyerController");
 
 // Rute untuk menampilkan semua pembeli
-router.get("/buyer", getBuyers);
+router.get("/buyers", getBuyers);
 
 // Rute untuk menampilkan pembeli berdasarkan ID
 router.get("/buyer/:id", getBuyerById);

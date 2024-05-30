@@ -41,6 +41,9 @@
       .invoice-table td {
         border-top: none;
       }
+      .invoice-status {
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
@@ -49,8 +52,6 @@
         <h1>Invoice</h1>
       </div>
       <div class="invoice-details">
-        <p>Invoice ID: <strong><%= invoice.invoice_id %></strong></p>
-        <p>Customer ID: <strong><%= invoice.customer.user_id %></strong></p>
         <p>Customer Name: <strong><%= invoice.customer.name %></strong></p>
         <p>Customer Email: <strong><%= invoice.customer.email %></strong></p>
         <p>Order Date: <strong><%= invoice.order_date %></strong></p>
@@ -58,22 +59,32 @@
       <table class="invoice-table">
         <thead>
           <tr>
-            <th>Product ID</th>
             <th>Product Name</th>
             <th>Category</th>
             <th>Image URL</th>
             <th>WiFi Access</th>
             <th>Room Count</th>
+            <th>Living Room</th>
+            <th>Garage</th>
+            <th>Location</th>
+            <th>Bank Account</th>
+            <th>Price</th>
+            <th>Map URL</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><%= invoice.product.product_id %></td>
             <td><%= invoice.product.name %></td>
             <td><%= invoice.product.category %></td>
             <td><%= invoice.product.image_url %></td>
             <td><%= invoice.product.wifi_access %></td>
             <td><%= invoice.product.room_count %></td>
+            <td><%= invoice.product.living_room %></td>
+            <td><%= invoice.product.garage %></td>
+            <td><%= invoice.product.location %></td>
+            <td><%= invoice.product.bank_account %></td>
+            <td><%= invoice.product.price %></td>
+            <td><%= invoice.product.map_url %></td>
           </tr>
         </tbody>
       </table>
@@ -81,8 +92,8 @@
         <p>
           User Role:
           <strong
-            ><%= invoice.user_role == 1? 'user' : user_role == 2 ? 'admin' :
-            'unknown' %></strong
+            ><%= invoice.user_role == 1 ? 'User' : invoice.user_role == 2 ?
+            'Admin' : 'Unknown' %></strong
           >
         </p>
         <p>Order Status: <strong><%= invoice.order_status %></strong></p>
