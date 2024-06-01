@@ -12,20 +12,31 @@ module.exports = {
         try {
             pool.getConnection(function (err, connection) {
                 if (err) throw err;
-                connection.query(
-                    `SELECT * FROM user`,
-                    function (error, results) {
-                        if (error) throw error;
-                        results.forEach(user => {
-                            user.last_login = moment(user.last_login).fromNow();
-                        });
-                        res.render("userList", {
-                            url: 'http://localhost:3000/',
-                            nama_depan: req.session.nama_depan,
-                            users: results
-                        });
-                    }
-                );
+
+                let query;
+                let params = [];
+                const userRole = req.session.role;
+
+                if (userRole == 2) {
+                    query = `SELECT * FROM user WHERE role IN (?, ?)`;
+                    params = [1, 3];
+                } else if (userRole == 4) {
+                    query = `SELECT * FROM user WHERE role = ?`;
+                    params = [2];
+                } 
+
+                connection.query(query, params, function (error, results) {
+                    if (error) throw error;
+                    results.forEach(user => {
+                        user.last_login = moment(user.last_login).fromNow();
+                    });
+                    res.render("userList", {
+                        url: 'http://localhost:3000/',
+                        nama_depan: req.session.nama_depan,
+                        users: results
+                    });
+                });
+
                 connection.release();
             });
         } catch (error) {
@@ -48,7 +59,6 @@ module.exports = {
                                 url: 'http://localhost:3000/',
                                 nama_depan: req.session.nama_depan,
                                 user: results[0]
-                            
                             });
                         } else {
                             res.status(404).send('User tidak ditemukan');
@@ -103,5 +113,4 @@ module.exports = {
             res.status(500).send('Terjadi kesalahan pada server');
         }
     }
-    
 };

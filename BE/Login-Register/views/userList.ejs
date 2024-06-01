@@ -61,7 +61,7 @@
                                     <td><%= user.update_time %></td>
                                     <td><%= user.create_time %></td>
                                     <td><%= user.last_login %></td>
-                                    <td><%= user.role == 1 ? 'user' : user.role == 2 ? 'admin' : 'unknown' %></td>
+                                    <td><%= user.role == 1 ? 'user' : user.role == 2 ? 'admin' : user.role == 3 ? 'pemilik' : user.role == 4 ? 'super admin' : 'unknown' %></td>
                                     <td>
                                         <a href="<%= url %>userlist/update/<%= user.user_id %>" class="btn btn-primary">Edit</a>
                                         <button class="btn btn-danger delete-btn" data-userid="<%= user.user_id %>">Delete</button>

@@ -56,6 +56,7 @@ module.exports = {
                                     req.session.loggedin = true;
                                     req.session.userid = userId;
                                     req.session.nama_depan = results[0].nama_depan;
+                                    req.session.role = role;
 
                                     if (role == 1) {
                                         res.redirect('/profile'); 
@@ -63,7 +64,12 @@ module.exports = {
                                         res.redirect('/userlist'); 
                                         // const token = jwt.sign({ userId, role }, secretKey, { expiresIn: '1h' });
                                         // res.json({ token });
+                                    } else if (role == 3) {
+                                        res.redirect('/userlist');
+                                    } else if (role == 4) {
+                                        res.redirect('/userlist');
                                     }
+                                    
                                 });
                             } else {
                                 req.flash('color', 'danger');
