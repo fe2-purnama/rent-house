@@ -66,7 +66,7 @@ module.exports = {
             pool.getConnection(function (err, connection) {
                 if (err) throw err;
                 connection.query(
-                    `UPDATE user SET nama_depan = ?, nama_belakang = ?, no_tlpn = ? WHERE user_id = ?`,
+                    `UPDATE user SET nama_depan = ?, nama_belakang = ?, no_tlpn = ?, update_time = NOW() WHERE user_id = ?`,
                     [nama_depan, nama_belakang, no_tlpn, id],
                     function (error, results) {
                         if (error) throw error;
@@ -106,7 +106,7 @@ module.exports = {
                         if (hashedOldPassword === storedPassword) {
                             let hashedNewPassword = crypto.createHash('sha512').update(new_password).digest('hex');
                             connection.query(
-                                `UPDATE user SET password = ? WHERE user_id = ?`,
+                                `UPDATE user SET password = ?, update_time = NOW() WHERE user_id = ?`,
                                 [hashedNewPassword, id],
                                 function (error, results) {
                                     if (error) throw error;
