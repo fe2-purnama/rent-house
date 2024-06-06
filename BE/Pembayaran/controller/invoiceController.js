@@ -18,7 +18,7 @@ module.exports = {
           p.product_id AS product_id,
           p.nama_product AS product_name,
           k.nama_kategori AS category_name,
-          p.gambar1 AS product_image_url,  -- Assuming you use gambar1 as the main image
+          p.gambar1 AS product_image_url,  -- Menggunakan gambar1 sebagai gambar utama
           p.akses_wifi AS wifi_access,
           p.jumlah_kamar AS room_count,
           p.ruang_tamu AS living_room,
@@ -29,11 +29,13 @@ module.exports = {
           p.map AS map_url,
           o.tgl_order AS order_date,
           o.role AS user_role,
-          o.status AS order_status
+          o.status AS order_status,
+          od.quantity AS quantity  -- Menambahkan kolom quantity dari tabel order
       FROM \`order\` o
       JOIN user u ON o.user_id = u.user_id
       JOIN product p ON o.product_id = p.product_id
       JOIN kategori k ON p.kategori_id = k.kategori_id
+      JOIN \`order\` od ON o.order_id = od.order_id
       WHERE o.order_id = ?
     `;
 
@@ -69,10 +71,12 @@ module.exports = {
           bank_account: results[0].bank_account,
           price: results[0].price,
           map_url: results[0].map_url,
+          quantity: results[0].quantity, // Menambahkan jumlah produk yang dipesan
         },
         order_date: results[0].order_date,
         user_role: results[0].user_role,
         order_status: results[0].order_status,
+        total_price: results[0].price * results[0].quantity, // Menghitung total harga
       };
 
       // // Render view invoice.ejs dengan data invoiceData
