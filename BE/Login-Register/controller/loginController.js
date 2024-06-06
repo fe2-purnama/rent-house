@@ -63,10 +63,12 @@ module.exports = {
                                     } else if (role == 2) {
                                         res.redirect('/userlist'); 
                                         // const token = jwt.sign({ userId, role }, secretKey, { expiresIn: '1h' });
-                                        // res.json({ token });
+                                        // res.json({ token, redirectTo: '/userlist' });
                                     } else if (role == 3) {
                                         res.redirect('/userlist');
                                     } else if (role == 4) {
+                                        // const token = jwt.sign({ userId, role }, secretKey, { expiresIn: '1h' });
+                                        // res.json({ token, redirectTo: '/userlist' });
                                         res.redirect('/userlist');
                                     }
                                     
@@ -115,19 +117,22 @@ module.exports = {
 
 // Middleware to verify JWT token
 module.exports.verifyToken = (req, res, next) => {
-    const token = req.headers['authorization'];
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(403).send('Token is required');
+    }
+
+    const token = authHeader.split(' ')[1]; // Split the header to get the token part
     if (!token) {
         return res.status(403).send('Token is required');
     }
-    
+
     jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
             return res.status(401).send('Invalid token');
         }
-        else{
         req.userId = decoded.userId;
         req.role = decoded.role;
-        next();   
-         }
+        next();
     });
 };
