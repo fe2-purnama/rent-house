@@ -25,6 +25,18 @@ module.exports = {
             // Debugging: Cetak nilai yang diterima
             console.log('Data pendaftaran:', { nama_depan, nama_belakang, email, password, no_tlpn, role });
 
+            // Debugging: Cetak nilai password
+            console.log('Password yang diterima:', password);
+
+            // Validasi password
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                console.error('Password tidak memenuhi kriteria keamanan');
+                req.flash('error', 'Password harus memiliki simbol, angka, 1 huruf kapital, dan panjangnya minimal 8 karakter');
+                res.redirect('/register');
+                return;
+            }
+
             if (nama_depan && nama_belakang && email && password && no_tlpn && role) {
                 pool.getConnection(function (err, connection) {
                     if (err) {
