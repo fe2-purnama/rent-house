@@ -91,7 +91,15 @@ module.exports = {
         try {
             let id = req.session.userid;
             let { old_password, new_password } = req.body;
-
+            console.log(`Old password: ${old_password}`);
+            console.log(`New password: ${new_password}`);
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+            if (!passwordRegex.test(new_password)) {
+                req.flash('color', 'danger');
+                req.flash('status', 'Oops..');
+                req.flash('message', 'New password does not meet security criteria.');
+                return res.redirect('/profile/change-password');
+            }
             pool.getConnection(function (err, connection) {
                 if (err) throw err;
                 connection.query(
@@ -102,9 +110,14 @@ module.exports = {
 
                         let storedPassword = results[0].password;
                         let hashedOldPassword = crypto.createHash('sha512').update(old_password).digest('hex');
-                        
+                        let hashedNewPassword = crypto.createHash('sha512').update(new_password).digest('hex');
+                        if (hashedOldPassword === hashedNewPassword) {
+                            req.flash('color', 'danger');
+                            req.flash('status', 'Oops..');
+                            req.flash('message', 'New password cannot be the same as the old password.');
+                            return res.redirect('/profile/change-password');
+                        }
                         if (hashedOldPassword === storedPassword) {
-                            let hashedNewPassword = crypto.createHash('sha512').update(new_password).digest('hex');
                             connection.query(
                                 `UPDATE user SET password = ?, update_time = NOW() WHERE user_id = ?`,
                                 [hashedNewPassword, id],

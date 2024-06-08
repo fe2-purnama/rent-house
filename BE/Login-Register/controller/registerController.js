@@ -22,13 +22,10 @@ module.exports = {
             let no_tlpn = req.body.no_tlpn;
             let role = req.body.role;
 
-            // Debugging: Cetak nilai yang diterima
             console.log('Data pendaftaran:', { nama_depan, nama_belakang, email, password, no_tlpn, role });
 
-            // Debugging: Cetak nilai password
             console.log('Password yang diterima:', password);
 
-            // Validasi password
             const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
             if (!passwordRegex.test(password)) {
                 console.error('Password tidak memenuhi kriteria keamanan');
