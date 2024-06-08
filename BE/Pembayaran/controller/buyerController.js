@@ -9,12 +9,12 @@ pool.on("error", (err) => {
 // Menampilkan List Costumers
 module.exports = {
   getBuyers: (req, res) => {
-    //jika role = 3 dan 2 maka akan memiliki akses melihat daftar pembeli, jika role bukan 3 dan 2 maka tidak dapat melihat daftar pembeli
-    if (req.role !== 2 || req.role !== 3) {
-      return res.status(403).json({
-        error: "Anda tidak memiliki akses untuk melihat daftar pembeli.",
-      });
-    }
+    // //jika role = 3 dan 2 maka akan memiliki akses melihat daftar pembeli, jika role bukan 3 dan 2 maka tidak dapat melihat daftar pembeli
+    // if (req.role !== 2 || req.role !== 3) {
+    //   return res.status(403).json({
+    //     error: "Anda tidak memiliki akses untuk melihat daftar pembeli.",
+    //   });
+    // }
 
     const query = `
     SELECT user.user_id, user.nama_depan, user.email, product.nama_product, kategori.nama_kategori, product.harga, product.lokasi, order.role, order.status
@@ -35,11 +35,11 @@ module.exports = {
 
   //mengambil pembeli berdasarkan user.id
   getBuyerById: (req, res) => {
-    if (req.role !== 2 || req.role !== 3) {
-      return res.status(403).json({
-        error: "Anda tidak memiliki akses untuk melihat daftar pembeli.",
-      });
-    }
+    // if (req.role !== 2 || req.role !== 3) {
+    //   return res.status(403).json({
+    //     error: "Anda tidak memiliki akses untuk melihat daftar pembeli.",
+    //   });
+    // }
     const buyerId = req.params.id;
     const query = `
   SELECT user.user_id, user.nama_depan, user.email, product.nama_product, kategori.nama_kategori, product.harga, product.lokasi, \`order\`.role, \`order\`.status
@@ -64,12 +64,12 @@ module.exports = {
 
   //memperbarui status berdasarkan user_id
   updateBuyer: (req, res) => {
-    if (req.role !== 2 && req.role !== 3) {
-      return res.status(403).json({
-        error:
-          "Anda tidak memiliki akses untuk melihat merubah daftar pembeli.",
-      });
-    }
+    // if (req.role !== 2 && req.role !== 3) {
+    //   return res.status(403).json({
+    //     error:
+    //       "Anda tidak memiliki akses untuk melihat merubah daftar pembeli.",
+    //   });
+    // }
     const { user_id, status } = req.body;
     const query = "UPDATE `order` SET status = ? WHERE user_id = ?";
     pool.query(query, [status, user_id], (err, results) => {
@@ -83,11 +83,11 @@ module.exports = {
 
   //menghapus pesanan berdasarkan order_id
   deleteBuyer: (req, res) => {
-    if (req.role !== 2 && req.role !== 3) {
-      return res.status(403).json({
-        error: "Anda tidak memiliki akses untuk menghapus daftar pembeli.",
-      });
-    }
+    // if (req.role !== 2 && req.role !== 3) {
+    //   return res.status(403).json({
+    //     error: "Anda tidak memiliki akses untuk menghapus daftar pembeli.",
+    //   });
+    // }
     const { id } = req.params;
 
     const query = "DELETE FROM `order` WHERE order_id = ?";
