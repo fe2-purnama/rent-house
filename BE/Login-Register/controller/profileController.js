@@ -10,12 +10,12 @@ pool.on('error', (err) => {
 module.exports = {
     profile(req, res) {
         try {
-            let id = req.session.userid;
+            let user_id = req.session.user_id;
             pool.getConnection(function (err, connection) {
                 if (err) throw err;
                 connection.query(
                     `SELECT * FROM user WHERE user_id = ?`,
-                    [id],
+                    [user_id],
                     function (error, results) {
                         if (error) throw error;
                         res.json({
@@ -37,12 +37,12 @@ module.exports = {
 
     editProfile(req, res) {
         try {
-            let id = req.session.userid;
+            let user_id = req.session.user_id;
             pool.getConnection(function (err, connection) {
                 if (err) throw err;
                 connection.query(
                     `SELECT * FROM user WHERE user_id = ?`,
-                    [id],
+                    [user_id],
                     function (error, results) {
                         if (error) throw error;
                         res.json({
@@ -61,13 +61,13 @@ module.exports = {
 
     updateProfile(req, res) {
         try {
-            let id = req.session.userid;
+            let user_id = req.session.user_id;
             let { nama_depan, nama_belakang, no_tlpn } = req.body;
             pool.getConnection(function (err, connection) {
                 if (err) throw err;
                 connection.query(
                     `UPDATE user SET nama_depan = ?, nama_belakang = ?, no_tlpn = ?, update_time = NOW() WHERE user_id = ?`,
-                    [nama_depan, nama_belakang, no_tlpn, id],
+                    [nama_depan, nama_belakang, no_tlpn, user_id],
                     function (error, results) {
                         if (error) throw error;
                         res.json({ message: 'Profile updated successfully' });
@@ -89,7 +89,7 @@ module.exports = {
 
     updatePassword(req, res) {
         try {
-            let id = req.session.userid;
+            let user_id = req.session.user_id;
             let { old_password, new_password } = req.body;
             console.log(`Old password: ${old_password}`);
             console.log(`New password: ${new_password}`);
@@ -105,7 +105,7 @@ module.exports = {
                 if (err) throw err;
                 connection.query(
                     `SELECT password FROM user WHERE user_id = ?`,
-                    [id],
+                    [user_id],
                     function (error, results) {
                         if (error) throw error;
 
@@ -122,7 +122,7 @@ module.exports = {
                         if (hashedOldPassword === storedPassword) {
                             connection.query(
                                 `UPDATE user SET password = ?, update_time = NOW() WHERE user_id = ?`,
-                                [hashedNewPassword, id],
+                                [hashedNewPassword, user_id],
                                 function (error, results) {
                                     if (error) throw error;
                                     res.json({
