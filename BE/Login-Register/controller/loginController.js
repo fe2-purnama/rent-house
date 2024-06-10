@@ -1,8 +1,6 @@
 const config = require('../library/database');
 let mysql = require('mysql');
 let pool = mysql.createPool(config);
-const jwt = require('jsonwebtoken');
-const secretKey = 'your-secret-key'; // Use a strong secret key
 
 pool.on('error', (err) => {
     console.error(err);
@@ -24,9 +22,11 @@ module.exports = {
     },
     loginAuth(req, res) {
         try {
+            console.log('Request body:', req.body); // Log the entire request body for debugging
             let email = req.body.email;
             let password = req.body.pass;
             console.log('Email:', email, 'Password:', password);
+
             if (email && password) {
                 pool.getConnection(function (err, connection) {
                     if (err) throw err;
@@ -45,56 +45,55 @@ module.exports = {
                                 connection.query(updateQuery, [userId], function (updateError, updateResults) {
                                     if (updateError) {
                                         console.error('Kesalahan pada query update last_login:', updateError);
-                                        req.flash('color', 'danger');
-                                        req.flash('status', 'Oops..');
-                                        req.flash('message', 'Terjadi kesalahan pada server');
-                                        res.redirect('/login');
-                                        return;
+                                        return res.status(500).json({
+                                            color: 'danger',
+                                            status: 'Oops..',
+                                            message: 'Terjadi kesalahan pada server'
+                                        });
                                     }
 
-                                    // Set session dan redirect atau berikan JWT token
+                                    // Set session
                                     req.session.loggedin = true;
                                     req.session.userid = userId;
                                     req.session.nama_depan = results[0].nama_depan;
                                     req.session.role = role;
 
-                                    if (role == 1) {
-                                        res.redirect('/profile'); 
-                                    } else if (role == 2) {
-                                        res.redirect('/userlist'); 
-                                        // const token = jwt.sign({ userId, role }, secretKey, { expiresIn: '1h' });
-                                        // res.json({ token, redirectTo: '/userlist' });
-                                    } else if (role == 3) {
-                                        res.redirect('/userlist');
-                                    } else if (role == 4) {
-                                        // const token = jwt.sign({ userId, role }, secretKey, { expiresIn: '1h' });
-                                        // res.json({ token, redirectTo: '/userlist' });
-                                        res.redirect('/userlist');
-                                    }
-                                    
+                                    // Send JSON response with user information
+                                    res.json({
+                                        user: {
+                                            userId,
+                                            nama_depan: results[0].nama_depan,
+                                            role
+                                        },
+                                        message: 'Login successful'
+                                    });
+
                                 });
                             } else {
-                                req.flash('color', 'danger');
-                                req.flash('status', 'Oops..');
-                                req.flash('message', 'Akun tidak ditemukan');
-                                res.redirect('/login');
+                                res.status(401).json({
+                                    color: 'danger',
+                                    status: 'Oops..',
+                                    message: 'Akun tidak ditemukan'
+                                });
                             }
                             connection.release();
                         }
                     );
                 });
             } else {
-                req.flash('color', 'danger');
-                req.flash('status', 'Oops..');
-                req.flash('message', 'Email dan password harus diisi');
-                res.redirect('/login');
+                res.status(400).json({
+                    color: 'danger',
+                    status: 'Oops..',
+                    message: 'Email dan password harus diisi'
+                });
             }
         } catch (error) {
             console.error('Terjadi kesalahan:', error);
-            req.flash('color', 'danger');
-            req.flash('status', 'Oops..');
-            req.flash('message', 'Terjadi kesalahan pada server');
-            res.redirect('/login');
+            res.status(500).json({
+                color: 'danger',
+                status: 'Oops..',
+                message: 'Terjadi kesalahan pada server'
+            });
         }
     },
     logout(req, res) {
@@ -102,37 +101,24 @@ module.exports = {
             req.session.destroy((err) => {
                 if (err) {
                     console.error(err);
-                    res.status(500).send('Terjadi kesalahan pada server');
-                    return;
+                    return res.status(500).json({
+                        color: 'danger',
+                        status: 'Oops..',
+                        message: 'Terjadi kesalahan pada server'
+                    });
                 }
                 res.clearCookie('thisissecret');
-                res.redirect('/login');
+                res.json({
+                    message: 'Logout successful'
+                });
             });
         } catch (error) {
             console.error('Terjadi kesalahan:', error);
-            res.status(500).send('Terjadi kesalahan pada server');
+            res.status(500).json({
+                color: 'danger',
+                status: 'Oops..',
+                message: 'Terjadi kesalahan pada server'
+            });
         }
-    },
-};
-
-// Middleware to verify JWT token
-module.exports.verifyToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    if (!authHeader) {
-        return res.status(403).send('Token is required');
     }
-
-    const token = authHeader.split(' ')[1]; // Split the header to get the token part
-    if (!token) {
-        return res.status(403).send('Token is required');
-    }
-
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            return res.status(401).send('Invalid token');
-        }
-        req.userId = decoded.userId;
-        req.role = decoded.role;
-        next();
-    });
 };
