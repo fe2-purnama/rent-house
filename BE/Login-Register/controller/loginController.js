@@ -24,7 +24,7 @@ module.exports = {
         try {
             console.log('Request body:', req.body); // Log the entire request body for debugging
             let email = req.body.email;
-            let password = req.body.pass;
+            let password = req.body.password;
             console.log('Email:', email, 'Password:', password);
 
             if (email && password) {
