@@ -36,13 +36,13 @@ module.exports = {
                         function (error, results) {
                             if (error) throw error;
                             if (results.length > 0) {
-                                const userId = results[0].user_id;
+                                const user_id = results[0].user_id;
                                 const role = results[0].role;
 
                                 // Update last_login waktu sekarang
                                 const updateQuery = `UPDATE user SET last_login = NOW() WHERE user_id = ?`;
 
-                                connection.query(updateQuery, [userId], function (updateError, updateResults) {
+                                connection.query(updateQuery, [user_id], function (updateError, updateResults) {
                                     if (updateError) {
                                         console.error('Kesalahan pada query update last_login:', updateError);
                                         return res.status(500).json({
@@ -54,14 +54,14 @@ module.exports = {
 
                                     // Set session
                                     req.session.loggedin = true;
-                                    req.session.userid = userId;
+                                    req.session.user_id = user_id;
                                     req.session.nama_depan = results[0].nama_depan;
                                     req.session.role = role;
 
                                     // Send JSON response with user information
                                     res.json({
                                         user: {
-                                            userId,
+                                            user_id,
                                             nama_depan: results[0].nama_depan,
                                             role
                                         },
