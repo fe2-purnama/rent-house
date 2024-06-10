@@ -5,6 +5,7 @@ var logger = require('morgan');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var flash = require('req-flash');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 const loginRoutes = require('./routes/login');
@@ -15,6 +16,7 @@ var app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
