@@ -18,7 +18,7 @@ module.exports = {
                     [id],
                     function (error, results) {
                         if (error) throw error;
-                        res.render("profile", {
+                        res.json({
                             url: 'http://localhost:3000/',
                             nama_depan: results[0]['nama_depan'],
                             email: results[0]['email'],
@@ -31,7 +31,7 @@ module.exports = {
             });
         } catch (error) {
             console.error('Terjadi kesalahan:', error);
-            res.status(500).send('Terjadi kesalahan pada server');
+            res.status(500).json({ message: 'Terjadi kesalahan pada server' });
         }
     },
 
@@ -45,7 +45,7 @@ module.exports = {
                     [id],
                     function (error, results) {
                         if (error) throw error;
-                        res.render("profileUpdate", {
+                        res.json({
                             url: 'http://localhost:3000/',
                             user: results[0]
                         });
@@ -55,7 +55,7 @@ module.exports = {
             });
         } catch (error) {
             console.error('Terjadi kesalahan:', error);
-            res.status(500).send('Terjadi kesalahan pada server');
+            res.status(500).json({ message: 'Terjadi kesalahan pada server' });
         }
     },
 
@@ -70,19 +70,19 @@ module.exports = {
                     [nama_depan, nama_belakang, no_tlpn, id],
                     function (error, results) {
                         if (error) throw error;
-                        res.redirect('/profile');
+                        res.json({ message: 'Profile updated successfully' });
                     }
                 );
                 connection.release();
             });
         } catch (error) {
             console.error('Terjadi kesalahan:', error);
-            res.status(500).send('Terjadi kesalahan pada server');
+            res.status(500).json({ message: 'Terjadi kesalahan pada server' });
         }
     },
 
     changePassword(req, res) {
-        res.render("changePassword", {
+        res.json({
             url: 'http://localhost:3000/'
         });
     },
@@ -95,10 +95,11 @@ module.exports = {
             console.log(`New password: ${new_password}`);
             const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
             if (!passwordRegex.test(new_password)) {
-                req.flash('color', 'danger');
-                req.flash('status', 'Oops..');
-                req.flash('message', 'New password does not meet security criteria.');
-                return res.redirect('/profile/change-password');
+                return res.status(400).json({
+                    color: 'danger',
+                    status: 'Oops..',
+                    message: 'New password does not meet security criteria.'
+                });
             }
             pool.getConnection(function (err, connection) {
                 if (err) throw err;
@@ -112,10 +113,11 @@ module.exports = {
                         let hashedOldPassword = crypto.createHash('sha512').update(old_password).digest('hex');
                         let hashedNewPassword = crypto.createHash('sha512').update(new_password).digest('hex');
                         if (hashedOldPassword === hashedNewPassword) {
-                            req.flash('color', 'danger');
-                            req.flash('status', 'Oops..');
-                            req.flash('message', 'New password cannot be the same as the old password.');
-                            return res.redirect('/profile/change-password');
+                            return res.status(400).json({
+                                color: 'danger',
+                                status: 'Oops..',
+                                message: 'New password cannot be the same as the old password.'
+                            });
                         }
                         if (hashedOldPassword === storedPassword) {
                             connection.query(
@@ -123,17 +125,19 @@ module.exports = {
                                 [hashedNewPassword, id],
                                 function (error, results) {
                                     if (error) throw error;
-                                    req.flash('color', 'success');
-                                    req.flash('status', 'Success');
-                                    req.flash('message', 'Password updated successfully');
-                                    res.redirect('/profile');
+                                    res.json({
+                                        color: 'success',
+                                        status: 'Success',
+                                        message: 'Password updated successfully'
+                                    });
                                 }
                             );
                         } else {
-                            req.flash('color', 'danger');
-                            req.flash('status', 'Oops..');
-                            req.flash('message', 'Incorrect old password');
-                            res.redirect('/profile/change-password');
+                            res.status(400).json({
+                                color: 'danger',
+                                status: 'Oops..',
+                                message: 'Incorrect old password'
+                            });
                         }
                     }
                 );
@@ -141,7 +145,7 @@ module.exports = {
             });
         } catch (error) {
             console.error('Terjadi kesalahan:', error);
-            res.status(500).send('Terjadi kesalahan pada server');
+            res.status(500).json({ message: 'Terjadi kesalahan pada server' });
         }
     }
 };
