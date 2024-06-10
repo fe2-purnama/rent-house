@@ -1,6 +1,8 @@
 const config = require('../library/database');
 let mysql = require('mysql');
 let pool = mysql.createPool(config);
+const jwt = require('jsonwebtoken');
+const secretKey = 'your-secret-key';
 
 pool.on('error', (err) => {
     console.error(err);
@@ -51,20 +53,22 @@ module.exports = {
                                             message: 'Terjadi kesalahan pada server'
                                         });
                                     }
-
-                                    // Set session
                                     req.session.loggedin = true;
                                     req.session.user_id = user_id;
                                     req.session.nama_depan = results[0].nama_depan;
                                     req.session.role = role;
+                                    // Generate JWT token
+                                    // const token = jwt.sign({ user_id, role }, secretKey, { expiresIn: '1h' });
+                                    
 
-                                    // Send JSON response with user information
+
                                     res.json({
                                         user: {
                                             user_id,
                                             nama_depan: results[0].nama_depan,
                                             role
                                         },
+                                        // token: token,
                                         message: 'Login successful'
                                     });
 
@@ -121,4 +125,26 @@ module.exports = {
     //         });
     //     }
     // }
+    
+};
+// Middleware to verify JWT token
+module.exports.verifyToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(403).send('Token is required');
+    }
+
+    const token = authHeader.split(' ')[1]; // Split the header to get the token part
+    if (!token) {
+        return res.status(403).send('Token is required');
+    }
+
+    jwt.verify(token, secretKey, (err, decoded) => {
+        if (err) {
+            return res.status(401).send('Invalid token');
+        }
+        req.userId = decoded.user_id; // Corrected typo from userId to user_id
+        req.role = decoded.role;
+        next();
+    });
 };

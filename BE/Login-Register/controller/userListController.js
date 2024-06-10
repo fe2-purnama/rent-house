@@ -16,7 +16,7 @@ module.exports = {
                 let query;
                 let params = [];
                 const userRole = req.session.role;
-// const userRole = req.role;
+                // const userRole = req.role;
                 if (userRole == 2) {
                     query = `SELECT * FROM user WHERE role IN (?, ?)`;
                     params = [1, 3];
