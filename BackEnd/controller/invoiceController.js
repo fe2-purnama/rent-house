@@ -16,6 +16,7 @@ module.exports = {
           u.user_id AS customer_user_id,
           CONCAT(u.nama_depan, ' ', u.nama_belakang) AS customer_name,
           u.email AS customer_email,
+          u.role AS user_role,
           p.product_id AS product_id,
           p.nama_product AS product_name,
           k.nama_kategori AS category_name,
@@ -29,7 +30,6 @@ module.exports = {
           p.harga AS price,
           p.map AS map_url,
           o.tgl_order AS order_date,
-          o.role AS user_role,
           o.status AS order_status,
           od.quantity AS quantity  -- Menambahkan kolom quantity dari tabel order
       FROM \`order\` o
