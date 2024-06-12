@@ -100,31 +100,31 @@ module.exports = {
             });
         }
     },
-    logout(req, res) {
-        try {
-            req.session.destroy((err) => {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).json({
-                        color: 'danger',
-                        status: 'Oops..',
-                        message: 'Terjadi kesalahan pada server'
-                    });
-                }
-                res.clearCookie('thisissecret');
-                res.json({
-                    message: 'Logout successful'
-                });
-            });
-        } catch (error) {
-            console.error('Terjadi kesalahan:', error);
-            res.status(500).json({
-                color: 'danger',
-                status: 'Oops..',
-                message: 'Terjadi kesalahan pada server'
-            });
-        }
-    }
+    // logout(req, res) {
+    //     try {
+    //         req.session.destroy((err) => {
+    //             if (err) {
+    //                 console.error(err);
+    //                 return res.status(500).json({
+    //                     color: 'danger',
+    //                     status: 'Oops..',
+    //                     message: 'Terjadi kesalahan pada server'
+    //                 });
+    //             }
+    //             res.clearCookie('thisissecret');
+    //             res.json({
+    //                 message: 'Logout successful'
+    //             });
+    //         });
+    //     } catch (error) {
+    //         console.error('Terjadi kesalahan:', error);
+    //         res.status(500).json({
+    //             color: 'danger',
+    //             status: 'Oops..',
+    //             message: 'Terjadi kesalahan pada server'
+    //         });
+    //     }
+    // }
     
 };
 // Middleware to verify JWT token
