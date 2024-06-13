@@ -29,9 +29,12 @@ module.exports = {
           p.no_rek AS bank_account,
           p.harga AS price,
           p.map AS map_url,
+          p.luas_properti AS property_size,
+          p.tanggal_mulai AS start_date,
+          p.tanggal_selesai AS end_date,
           o.tgl_order AS order_date,
           o.status AS order_status,
-          od.quantity AS quantity  -- Menambahkan kolom quantity dari tabel order
+          p.harga_total AS total_price
       FROM \`order\` o
       JOIN user u ON o.user_id = u.user_id
       JOIN product p ON o.product_id = p.product_id
@@ -72,17 +75,15 @@ module.exports = {
           bank_account: results[0].bank_account,
           price: results[0].price,
           map_url: results[0].map_url,
-          quantity: results[0].quantity, // Menambahkan jumlah produk yang dipesan
+          property_size: results[0].property_size,
         },
         order_date: results[0].order_date,
+        start_date: results[0].start_date,
+        end_date: results[0].end_date,
         user_role: results[0].user_role,
         order_status: results[0].order_status,
-        total_price: results[0].price * results[0].quantity, // Menghitung total harga
+        total_price: results[0].total_price,
       };
-
-      // // Render view invoice.ejs dengan data invoiceData
-      // res.render("invoice", { invoice: invoiceData });
-
       // Render as JSON
       res.json({ invoice: invoiceData });
     });
