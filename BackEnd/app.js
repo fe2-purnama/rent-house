@@ -12,6 +12,7 @@ const loginRoutes = require("./routes/login");
 const registerRoutes = require("./routes/register");
 const userRoutes = require("./routes/userList");
 const invoiceRouter = require("./routes/invoice");
+const productRoutes = require('./routes/productRoutes');
 
 //dian
 const buyerRoutes = require("./routes/buyer");
@@ -55,5 +56,6 @@ app.use("/userList", userRoutes); // Mount userList routes at '/userList'
 //dian
 app.use("/invoice", invoiceRouter)
 app.use("/buyers", buyerRoutes);
+app.use('/api/products', productRoutes);
 
 module.exports = app;

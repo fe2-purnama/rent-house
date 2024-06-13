@@ -5,4 +5,3 @@ module.exports = {
     password            : '',
     database            : 'renthouse'
 };
-
