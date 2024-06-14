@@ -6,6 +6,7 @@ var session = require("express-session");
 var bodyParser = require("body-parser");
 var flash = require("req-flash");
 var cors = require("cors");
+var dotenv = require("dotenv");
 
 var indexRouter = require("./routes/index");
 const loginRoutes = require("./routes/login");
@@ -17,6 +18,9 @@ const orderRouter = require("./routes/order");
 const productRoutes = require("./routes/productRoutes");
 
 var app = express();
+
+dotenv.config()
+const port = process.env.PORT || 3000
 
 app.use(logger("dev"));
 app.use(bodyParser.json());
