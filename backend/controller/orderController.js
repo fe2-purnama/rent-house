@@ -1,6 +1,6 @@
 const config = require("../library/database");
-let mysql = require("mysql");
-let pool = mysql.createPool(config);
+const mysql = require("mysql");
+const pool = mysql.createPool(config);
 
 pool.on("error", (err) => {
   console.error(err);
@@ -8,10 +8,18 @@ pool.on("error", (err) => {
 
 module.exports = {
   addOrder: async (req, res) => {
-    const { tgl_order, product_id, user_id, tanggal_selesai, tanggal_mulai } =
-      req.body;
+    const { tgl_order, tanggal_mulai, lama_tinggal } = req.body;
+    const product_id = req.session.productId;
+    const user_id = req.session.user_id;
 
     console.log("Received data:", req.body);
+    console.log("Session data:", { product_id, user_id });
+
+    if (!product_id || !user_id) {
+      return res
+        .status(400)
+        .json({ error: "Product ID and User ID must be in session" });
+    }
 
     try {
       // Check if the product exists and get its price
@@ -25,7 +33,15 @@ module.exports = {
           console.log("Product not found for product_id:", product_id);
           return res.status(404).json({ error: "Product not found" });
         }
-        const harga_total = productResults[0].harga;
+        const harga_produk = productResults[0].harga;
+        const harga_total = harga_produk * lama_tinggal;
+
+        // Calculate tanggal_selesai
+        const startDate = new Date(tanggal_mulai);
+        const endDate = new Date(startDate);
+        endDate.setMonth(startDate.getMonth() + parseInt(lama_tinggal));
+
+        const tanggal_selesai = endDate.toISOString().split("T")[0]; // Format tanggal yyyy-mm-dd
 
         // Check if the user exists
         const userQuery = `SELECT user_id FROM user WHERE user_id = ?`;
@@ -38,11 +54,9 @@ module.exports = {
             console.log("User not found for user_id:", user_id);
             return res.status(404).json({ error: "User not found" });
           }
-
-          // Insert the order
           const insertQuery = `
-            INSERT INTO \`order\` (tgl_order, product_id, user_id, status, tanggal_selesai, tanggal_mulai, harga_total)
-            VALUES (?, ?, ?, 'Pending', ?, ?, ?)
+            INSERT INTO \`order\` (tgl_order, product_id, user_id, status, tanggal_selesai, tanggal_mulai, harga_total, lama_tinggal)
+            VALUES (?, ?, ?, 'Pending', ?, ?, ?, ?)
           `;
           pool.query(
             insertQuery,
@@ -53,6 +67,7 @@ module.exports = {
               tanggal_selesai,
               tanggal_mulai,
               harga_total,
+              lama_tinggal,
             ],
             (insertError, insertResults) => {
               if (insertError) {
