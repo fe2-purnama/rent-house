@@ -46,8 +46,8 @@ const HomePage = () => {
             <Container>
                 <Row>
                     <Col>
-                        <h1 className="text-center fw-bold">Property Terbaru</h1>
-                        <p className="text-center">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                        <h1 className="text-center fw-bold">Newest Property</h1>
+                        <p className="text-center">Lets find the best accommodation that suits your needs.</p>
                     </Col>
                 </Row>
                 <Row>
