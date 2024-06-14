@@ -24,9 +24,9 @@ module.exports = {
                     query = `SELECT * FROM user WHERE role = ?`;
                     params = [2];
                 } else {
-                    res.status(403).json({
+                    return res.status(403).json({
                         error: "Anda tidak memiliki akses pada halaman ini.",
-                      });
+                    });
                 }
 
                 connection.query(query, params, function (error, results) {
