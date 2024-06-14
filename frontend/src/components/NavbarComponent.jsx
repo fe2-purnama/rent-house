@@ -41,7 +41,7 @@ const NavbarComponent = () => {
                     </Nav>
 
                     <div className="text-center">
-                        <button className="btn btn1 btn-outline rounded-1">Sign Up</button> 
+                        <button className="btn btn1 btn-outline rounded-1" onClick={() => navigate("/register")}>Sign Up</button> 
                         <button className="btn btn2 rounded-1 ms-2" onClick={() => navigate("/login")}>Login</button> 
                     </div>
                 </Navbar.Collapse>
