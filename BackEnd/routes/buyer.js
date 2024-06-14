@@ -1,11 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {
-  getBuyers,
-  getBuyerById,
-  updateBuyer,
-  deleteBuyer,
-} = require("../controller/buyerController");
+const {getBuyers,getBuyerById,updateBuyer,deleteBuyer} = require("../controller/buyerController");
 
 // Rute untuk menampilkan semua pembeli
 router.get("/", getBuyers);

@@ -30,11 +30,11 @@ module.exports = {
           p.harga AS price,
           p.map AS map_url,
           p.luas_properti AS property_size,
-          p.tanggal_mulai AS start_date,
-          p.tanggal_selesai AS end_date,
+          o.tanggal_mulai AS start_date,
+          o.tanggal_selesai AS end_date,
           o.tgl_order AS order_date,
           o.status AS order_status,
-          p.harga_total AS total_price
+          o.harga_total AS total_price
       FROM \`order\` o
       JOIN user u ON o.user_id = u.user_id
       JOIN product p ON o.product_id = p.product_id
