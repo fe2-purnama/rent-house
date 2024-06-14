@@ -31,8 +31,8 @@ const HomePage = () => {
                         <p className="mb-4">Rent House is an online platform that provides comprehensive listings of rental properties, including houses, apartments, and shared accommodations.</p>
                         
                         <div className="button">
-                            <button className="btn btn1 rounded-1 me-2 mb-xs-0 mb-2" onClick={() => navigate("/property")}>Lihat Property</button>
-                            <button className="btn btn2 btn-outline rounded-1 mb-xs-0 mb-2">Lihat Discount</button>
+                            <button className="btn btn1 rounded-1 me-2 mb-xs-0 mb-2" onClick={() => navigate("/property")}>Show Property</button>
+                            <button className="btn btn2 btn-outline rounded-1 mb-xs-0 mb-2">Show Discount</button>
                         </div>
                     </Col>
                     <Col lg="6" className="pt-lg-0 pt-5">
@@ -74,7 +74,7 @@ const HomePage = () => {
                 <Row>
                     <Col className="text-center">
                         <button className="btn btn1 rounded-5 btn-lg" data-aos="fade-up" data-aos-duration="1000" onClick={() => navigate("/property")}>
-                            Lihat Semua Property
+                            All Property
                             <i className="fa-solid fa-chevron-right ms-1"></i>
                         </button>
                     </Col>
