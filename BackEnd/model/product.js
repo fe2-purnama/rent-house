@@ -73,18 +73,6 @@ const Product = sequelize.define('Product', {
     luas_properti: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    tanggal_selesai: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
-    tanggal_mulai: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
-    harga_total: {
-        type: DataTypes.INTEGER,
-        allowNull: false
     }
 }, {
     tableName: 'product',
