@@ -11,11 +11,10 @@ var indexRouter = require("./routes/index");
 const loginRoutes = require("./routes/login");
 const registerRoutes = require("./routes/register");
 const userRoutes = require("./routes/userList");
-const invoiceRouter = require("./routes/invoice");
-const productRoutes = require('./routes/productRoutes');
-
-//dian
 const buyerRoutes = require("./routes/buyer");
+const invoiceRouter = require("./routes/invoice");
+const orderRouter = require("./routes/order");
+const productRoutes = require("./routes/productRoutes");
 
 var app = express();
 
@@ -54,8 +53,9 @@ app.use("/register", registerRoutes);
 app.use("/userList", userRoutes); // Mount userList routes at '/userList'
 
 //dian
-app.use("/invoice", invoiceRouter)
+app.use("/invoice", invoiceRouter);
 app.use("/buyers", buyerRoutes);
-app.use('/api/products', productRoutes);
+app.use("/orders", orderRouter);
+app.use("/api/products", productRoutes);
 
 module.exports = app;
