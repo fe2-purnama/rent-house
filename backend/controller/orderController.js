@@ -22,7 +22,7 @@ module.exports = {
     }
 
     try {
-      // Check if the product exists and get its price
+      // Check ijika product exists dan get harga
       const productQuery = `SELECT harga FROM product WHERE product_id = ?`;
       pool.query(productQuery, [product_id], (productError, productResults) => {
         if (productError) {
@@ -36,14 +36,14 @@ module.exports = {
         const harga_produk = productResults[0].harga;
         const harga_total = harga_produk * lama_tinggal;
 
-        // Calculate tanggal_selesai
+        // Menghitung tanggal_selesai
         const startDate = new Date(tanggal_mulai);
         const endDate = new Date(startDate);
         endDate.setMonth(startDate.getMonth() + parseInt(lama_tinggal));
 
         const tanggal_selesai = endDate.toISOString().split("T")[0]; // Format tanggal yyyy-mm-dd
 
-        // Check if the user exists
+        // chek jika user exists
         const userQuery = `SELECT user_id FROM user WHERE user_id = ?`;
         pool.query(userQuery, [user_id], (userError, userResults) => {
           if (userError) {

@@ -3,10 +3,10 @@ let mysql = require("mysql");
 let pool = mysql.createPool(config);
 
 pool.on("error", (err) => {
-  console.error(err); 
+  console.error(err);
 });
 
-// Menampilkan List Pembeli
+// Menampilkan List Pembeli/order
 module.exports = {
   getBuyers: (req, res) => {
     const roleBuyer = req.session.role;
@@ -26,7 +26,6 @@ module.exports = {
         }
       });
     } else {
-      // Jika pengguna tidak memiliki peran 2 atau 3, mereka tidak diizinkan untuk melihat daftar pembeli
       res.status(403).json({
         error: "Anda tidak memiliki akses pada halaman ini.",
       });
@@ -55,7 +54,6 @@ module.exports = {
         res.send(results[0]);
       });
     } else {
-      // Jika pengguna tidak memiliki peran 2 atau 3, mereka tidak diizinkan
       res.status(403).json({
         error: "Anda tidak memiliki akses pada halaman ini.",
       });
@@ -76,7 +74,6 @@ module.exports = {
         }
       });
     } else {
-      // Jika pengguna tidak memiliki peran 2 atau 3, mereka tidak diizinkan
       res.status(403).json({
         error: "Anda tidak memiliki akses pada halaman ini.",
       });
