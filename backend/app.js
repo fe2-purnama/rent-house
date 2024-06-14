@@ -16,6 +16,7 @@ const buyerRoutes = require("./routes/buyer");
 const invoiceRouter = require("./routes/invoice");
 const orderRouter = require("./routes/order");
 const productRoutes = require("./routes/productRoutes");
+const homeRouter = require("./routes/home")
 
 var app = express();
 
@@ -50,7 +51,7 @@ app.use(function (req, res, next) {
 
 app.set("views", path.join(__dirname, "./views"));
 app.set("view engine", "ejs");
-
+app.use("/", homeRouter);
 app.use("/", indexRouter);
 app.use("/login", loginRoutes);
 app.use("/register", registerRoutes);
