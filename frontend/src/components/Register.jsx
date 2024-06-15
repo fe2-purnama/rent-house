@@ -1,11 +1,11 @@
-import React from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import { Form, Button, Alert } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Register = ({ handleSubmit, handleChange, formData, message }) => {
   return (
     <div className="register-container">
-      <h2 className='text-center'>Register</h2>
+      <h2 className="text-center">Register</h2>
       {message && <Alert variant="danger">{message}</Alert>}
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formBasicFirstName">
@@ -69,7 +69,7 @@ const Register = ({ handleSubmit, handleChange, formData, message }) => {
             type="text"
             name="role"
             placeholder="Enter role"
-            value={formData.role=1}
+            value={(formData.role = 1)}
             onChange={handleChange}
             required
             hidden
@@ -81,13 +81,13 @@ const Register = ({ handleSubmit, handleChange, formData, message }) => {
       </Form>
       <style jsx="true">{`
         :root {
-          --body-bg: #1C3988;
+          --body-bg: #1c3988;
           --form-bg: #394383;
           --white: #ffffff;
           --main: #4c65bc;
           --main-light: #5e87f5;
           --main-dark: #5576d9;
-          --gray-light: #EEEEEE;
+          --gray-light: #eeeeee;
           --gray: #5e87f5;
           --thin: 300;
           --normal: 400;
@@ -97,7 +97,7 @@ const Register = ({ handleSubmit, handleChange, formData, message }) => {
 
         body {
           background: var(--body-bg);
-          font-family: 'Titillium Web', sans-serif;
+          font-family: "Titillium Web", sans-serif;
         }
 
         label {
@@ -135,7 +135,7 @@ const Register = ({ handleSubmit, handleChange, formData, message }) => {
           font-size: 1.5rem;
           font-weight: var (--bold);
           text-transform: uppercase;
-          letter-spacing: .1em;
+          letter-spacing: 0.1em;
           background: var (--main);
           color: var (--white);
           transition: all 0.5s ease;

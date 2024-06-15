@@ -1,52 +1,55 @@
-import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// src/components/Login.jsx
+import React, { useState, useContext } from "react";
+import { Form, Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError('Email dan password harus diisi');
+      setError("Email dan password harus diisi");
     } else {
-      setError('');
+      setError("");
       try {
-        const response = await fetch('http://localhost:3000/login/auth', {  //Cocokkin backend
-          method: 'POST',
+        const response = await fetch("http://localhost:3000/login/auth", {
+          // Cocokkan dengan backend
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ email, password }),
         });
 
         const result = await response.json();
         if (response.ok) {
-          console.log('Login successful:', result);
-          localStorage.setItem('token', result.token);
-          navigate('/');
+          console.log("Login successful:", result);
+          login(result.user);
         } else {
-          setError(result.message || 'Login failed');
+          setError(result.message || "Login failed");
         }
       } catch (error) {
-        console.error('Error during login:', error);
-        setError('Terjadi kesalahan pada server');
+        console.error("Error during login:", error);
+        setError("Terjadi kesalahan pada server");
       }
     }
   };
 
   const handleRegisterRedirect = (e) => {
     e.preventDefault();
-    navigate('/register');
+    navigate("/register");
   };
 
   return (
     <div className="login-container">
-      <h2 className='text-center'>Login</h2>
+      <h2 className="text-center">Login</h2>
       {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formBasicEmail">
@@ -80,13 +83,13 @@ const Login = () => {
       </Form>
       <style jsx="true">{`
         :root {
-          --body-bg: #1C3988;
+          --body-bg: #1c3988;
           --form-bg: #394383;
           --white: #ffffff;
-          --main: #1C3988;
+          --main: #1c3988;
           --main-light: #5e87f5;
           --main-dark: #5576d9;
-          --gray-light: #EEEEEE;
+          --gray-light: #eeeeee;
           --gray: #5e87f5;
           --thin: 300;
           --normal: 400;
@@ -96,11 +99,10 @@ const Login = () => {
 
         body {
           background: var(--body-bg);
-          font-family: 'Titillium Web', sans-serif;
+          font-family: "Titillium Web", sans-serif;
         }
 
         label {
-          
           font-size: 18px;
         }
 
@@ -135,7 +137,7 @@ const Login = () => {
           font-size: 1.5rem;
           font-weight: var(--bold);
           text-transform: uppercase;
-          letter-spacing: .1em;
+          letter-spacing: 0.1em;
           background: var(--main);
           color: var(--white);
           transition: all 0.5s ease;
