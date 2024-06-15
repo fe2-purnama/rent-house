@@ -61,6 +61,7 @@ app.use("/userList", userRoutes); // Mount userList routes at '/userList'
 app.use("/invoice", invoiceRouter);
 app.use("/buyers", buyerRoutes);
 app.use("/orders", orderRouter);
-app.use("/api/products", productRoutes);
+//akhsya
+app.use("/property", productRoutes);
 
 module.exports = app;
