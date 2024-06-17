@@ -41,7 +41,7 @@ const NavbarComponent = () => {
                 <NavLink to="/userlist">User List</NavLink>
               )}
               {user && user.role === "3" && (
-                <NavLink to="/addproperty">Add Property</NavLink>
+                <NavLink to="/list-property">Add Property</NavLink>
               )}
               {user && user.role === "4" && (
                 <>
