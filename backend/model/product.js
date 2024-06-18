@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('renthouse', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql'
+const sequelize = new Sequelize('MR3KGTTjGHtrpA8I', 'eANIsB45Cj2atuuc', 'wXPTz5aSIlSxOYCI', {
+    host: 'educalab.id',
+    dialect: 'mysql',
+    port: 3307
 });
 
 const Product = sequelize.define('Product', {
